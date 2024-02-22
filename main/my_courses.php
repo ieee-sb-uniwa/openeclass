@@ -38,15 +38,19 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course.code code,
                      course.public_code,
                      course.title title,
+                     user_timetable.start_hour start_time,
+                     user_timetable.end_hour end_time,
+                     user_timetable.day_of_week day,
                      course.prof_names professor,
                      course.lang,
                      course.visible visible,
                      course_user.status status,
                      course_user.favorite favorite
-               FROM course JOIN course_user
-                    ON course.id = course_user.course_id
-                    AND course_user.user_id = ?d
-                    AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+               FROM course 
+               JOIN course_user ON course.id = course_user.course_id
+               LEFT JOIN user_timetable ON user_timetable.course_id = course.id
+               where course_user.user_id = ?d
+                AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
                 ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
 $tool_content .= action_bar([
@@ -74,10 +78,15 @@ if ($myCourses) {
             <table class='table-default'>
                 <thead class='list-header'>
                     <th>$langCourse</th>
+                    <th>$langDay</th>
+                    <th></th>
                     <th class='text-center'>".icon('fa-gears')."</th>
                 </thead>
                 <tbody>";
     foreach ($myCourses as $course) {
+        $start_time = isset($course->start_time) ? date('H:i', strtotime($course->start_time)) : ' ';
+        $end_time = isset($course->end_time) ? date('H:i', strtotime($course->end_time)) : ' ';
+        $day = isset($course->day) ? $course->day : '';
         if (isset($course->favorite)) {
             $favorite_icon = 'fa-star';
             $fav_status = 0;
@@ -104,6 +113,8 @@ if ($myCourses) {
                         <td><strong><a href='{$urlServer}courses/$course->code/'>".q($course->title)."</a></strong> (".q($course->public_code).")
                             <div><small>" . q($course->professor) . "</small></div>
                         </td>
+                        <td>$day</td>
+                        <td> $start_time - $end_time</td>
                         <td class='text-center'>
                             $favorite_button &nbsp;
                             $action_button
