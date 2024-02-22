@@ -79,14 +79,15 @@ if ($myCourses) {
                 <thead class='list-header'>
                     <th>$langCourse</th>
                     <th>$langDay</th>
-                    <th></th>
+                    <th>$langHours</th>
                     <th class='text-center'>".icon('fa-gears')."</th>
                 </thead>
                 <tbody>";
     foreach ($myCourses as $course) {
-        $start_time = isset($course->start_time) ? date('H:i', strtotime($course->start_time)) : ' ';
-        $end_time = isset($course->end_time) ? date('H:i', strtotime($course->end_time)) : ' ';
-        $day = isset($course->day) ? $course->day : '';
+        $start_time = isset($course->start_time) ? date('H:i', strtotime($course->start_time)) : '';
+        $end_time = isset($course->end_time) ? date('H:i', strtotime($course->end_time)) : '';
+        $day_index = isset($course->day) ? $course->day : '';
+        $day = isset($langDay_of_weekNames['long'][$day_index]) ? $langDay_of_weekNames['long'][$day_index] : ''; 
         if (isset($course->favorite)) {
             $favorite_icon = 'fa-star';
             $fav_status = 0;
@@ -113,8 +114,8 @@ if ($myCourses) {
                         <td><strong><a href='{$urlServer}courses/$course->code/'>".q($course->title)."</a></strong> (".q($course->public_code).")
                             <div><small>" . q($course->professor) . "</small></div>
                         </td>
-                        <td>$day</td>
-                        <td> $start_time - $end_time</td>
+                        <td>" .q($day). "</td>
+                        <td>" .q($start_time). " - ".q($end_time). "</td>
                         <td class='text-center'>
                             $favorite_button &nbsp;
                             $action_button
