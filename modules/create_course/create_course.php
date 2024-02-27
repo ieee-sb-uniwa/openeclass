@@ -220,23 +220,34 @@ if (!isset($_POST['create_course'])) {
             <div class='form-group'>
                 <label for='course_day' class='col-sm-2 control-label'>$langDay $langsOfCourse</label>
                 <div class='col-sm-10'>
-                    <input type='text' class='form-control' name='course_day' id='course_day' >
+                <select class='form-control' name='dayOfWeek' id='dayOfWeek'>
+                    <option value='0'>".$langDay_of_weekNames['long'][1]."</option>
+                    <option value='1'>".$langDay_of_weekNames['long'][2]."</option>
+                    <option value='2'>".$langDay_of_weekNames['long'][3]."</option>
+                    <option value='3'>".$langDay_of_weekNames['long'][4]."</option>
+                    <option value='4'>".$langDay_of_weekNames['long'][5]."</option>
+                    <option value='5'>".$langDay_of_weekNames['long'][6]."</option>
+                    <option value='6'>".$langDay_of_weekNames['long'][0]."</option>
+                </select>
                 </div>
             </div>
             <div class='input-append bootstrap-timepicker form-group'>
-                <label for='duration' class='col-sm-2 control-label'>Start Hour:</label>
+                <label for='startHour' class='col-sm-2 control-label'>$langStart ($langhour)</label>
                 <div class='col-sm-10'>
                     <div class='input-group add-on'>
-                        <input class='form-control' name='duration' id='startHour' type='text' value='' placeholder='Select start hour'>
+                        <input class='form-control' name='startHour' id='startHour' type='text' value=''>
                     <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                 </div>
             </div>
             </div>
-            <div class='form-group'>
-                <label for='hours_taught' class='col-sm-2 control-label'>$langFinish $langsOfCourse ($langHours)</label>
+            <div class='input-append bootstrap-timepicker form-group'>
+                <label for='endHour' class='col-sm-2 control-label'>$langFinish ($langhour)</label>
                 <div class='col-sm-10'>
-                    <input type='text' class='form-control' name='hours_taught' id='hours_taught'>
+                    <div class='input-group add-on'>
+                        <input class='form-control' name='startHour' id='startHour' type='text' value=''>
+                    <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                 </div>
+            </div>
             </div>
             <div class='form-group'>
                 <label for='localize' class='col-sm-2 control-label'>$langLanguage:</label>
