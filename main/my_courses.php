@@ -38,9 +38,9 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course.code code,
                      course.public_code,
                      course.title title,
-                     user_timetable.start_hour start_time,
-                     user_timetable.end_hour end_time,
-                     user_timetable.day_of_week day,
+                     courses_timetable.start_hour AS start_time,
+                     courses_timetable.end_hour AS end_time,
+                     courses_timetable.day_of_week AS day,
                      course.prof_names professor,
                      course.lang,
                      course.visible visible,
@@ -48,10 +48,10 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course_user.favorite favorite
                FROM course 
                JOIN course_user ON course.id = course_user.course_id
-               LEFT JOIN user_timetable ON user_timetable.course_id = course.id
-               where course_user.user_id = ?d
-                AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
-                ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
+               LEFT JOIN courses_timetable ON courses_timetable.course_id = course.id
+               WHERE course_user.user_id = ?d
+               AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+               ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
 $tool_content .= action_bar([
     [ 'title' => $langRegCourses,
