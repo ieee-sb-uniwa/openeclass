@@ -214,6 +214,15 @@ $db->query("CREATE TABLE `course_user` (
       `favorite` datetime DEFAULT NULL,
       PRIMARY KEY (course_id, user_id)) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `courses_timetable` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_id INT,
+    start_hour TIME CHECK (start_hour BETWEEN '00:00:00' AND '23:59:59'),
+    end_hour TIME CHECK (end_hour BETWEEN '00:00:00' AND '23:59:59'),
+    day_of_week TINYINT UNSIGNED CHECK (day_of_week BETWEEN 0 AND 6), 
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
+) $tbl_options");
+
 $db->query("CREATE TABLE `course_user_request` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `uid` int(11) NOT NULL,
