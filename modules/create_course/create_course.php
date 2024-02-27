@@ -218,6 +218,27 @@ if (!isset($_POST['create_course'])) {
                 </div>
             </div>
             <div class='form-group'>
+                <label for='course_day' class='col-sm-2 control-label'>$langDay $langsOfCourse</label>
+                <div class='col-sm-10'>
+                    <input type='text' class='form-control' name='course_day' id='course_day' >
+                </div>
+            </div>
+            <div class='input-append bootstrap-timepicker form-group'>
+                <label for='duration' class='col-sm-2 control-label'>Start Hour:</label>
+                <div class='col-sm-10'>
+                    <div class='input-group add-on'>
+                        <input class='form-control' name='duration' id='startHour' type='text' value='' placeholder='Select start hour'>
+                    <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
+                </div>
+            </div>
+            </div>
+            <div class='form-group'>
+                <label for='hours_taught' class='col-sm-2 control-label'>$langFinish $langsOfCourse ($langHours)</label>
+                <div class='col-sm-10'>
+                    <input type='text' class='form-control' name='hours_taught' id='hours_taught'>
+                </div>
+            </div>
+            <div class='form-group'>
                 <label for='localize' class='col-sm-2 control-label'>$langLanguage:</label>
                 <div class='col-sm-10'>
                       " . lang_select_options('localize', "class='form-control'") . "
