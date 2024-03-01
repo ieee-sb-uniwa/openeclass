@@ -104,6 +104,7 @@ $head_content .= <<<hContent
         });
         $('#endHour').timepicker({
             showMeridian: false,
+            format: 'hh:ii',
             pickerPosition: 'bottom-right',
             minuteStep: 1,
             defaultTime: false,
@@ -251,7 +252,7 @@ if (!isset($_POST['create_course'])) {
                 <label for='startHour' class='col-sm-2 control-label'>$langStart <small>$langInHour</small>:</label>
                 <div class='col-sm-10'>
                     <div class='input-group add-on'>
-                        <input class='form-control input-small' name='startHour' id='startHour' type='text' value=''>
+                        <input class='form-control input-small' name='startHour' id='startHour' type='text'>
                         <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
@@ -260,7 +261,7 @@ if (!isset($_POST['create_course'])) {
                 <label for='endHour' class='col-sm-2 control-label'>$langFinish <small>$langInHour</small>:</label>
                 <div class='col-sm-10'>
                     <div class='input-group add-on'>
-                        <input class='form-control input-small' name='endHour' id='endHour' type='text' value=''>
+                        <input class='form-control input-small' name='endHour' id='endHour' type='text'>
                         <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
@@ -538,9 +539,15 @@ if (!isset($_POST['create_course'])) {
     $course->refresh($new_course_id, $departments);
 
     // Create course's timetable
-    $dayOfWeek = $_POST['dayOfWeek'];
-    $startHour = $_POST['startHour'];
-    $endHour = $_POST['endHour'];
+    $dayOfWeek = intval($_POST['dayOfWeek']);
+    $startHour =$_POST['startHour'];
+    $endHour =   $_POST['endHour'];
+    // Add seconds to time format
+    $startHour .= ':00';
+    $endHour .= ':00';
+    // Ensure the time strings are in the correct format ("hh:ii:ss")
+    $startHour = DateTime::createFromFormat('H:i:s', $startHour)->format('H:i:s');
+    $endHour = DateTime::createFromFormat('H:i:s', $endHour)->format('H:i:s');
     Database::get()->query("INSERT INTO courses_timetable 
                             SET course_id = ?d,
                                 start_hour = ?t,
