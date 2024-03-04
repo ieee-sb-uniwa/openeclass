@@ -38,9 +38,6 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course.code code,
                      course.public_code,
                      course.title title,
-                     courses_timetable.start_hour AS start_time,
-                     courses_timetable.end_hour AS end_time,
-                     courses_timetable.day_of_week AS day,
                      course.prof_names professor,
                      course.lang,
                      course.visible visible,
@@ -48,7 +45,6 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course_user.favorite favorite
                FROM course 
                JOIN course_user ON course.id = course_user.course_id
-               LEFT JOIN courses_timetable ON courses_timetable.course_id = course.id
                WHERE course_user.user_id = ?d
                AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
                ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
@@ -84,10 +80,6 @@ if ($myCourses) {
                 </thead>
                 <tbody>";
     foreach ($myCourses as $course) {
-        $start_time = isset($course->start_time) ? date('H:i', strtotime($course->start_time)) : '';
-        $end_time = isset($course->end_time) ? date('H:i', strtotime($course->end_time)) : '';
-        $day_index = isset($course->day) ? $course->day : '';
-        $day = isset($langDay_of_weekNames['long'][$day_index]) ? $langDay_of_weekNames['long'][$day_index] : ''; 
         if (isset($course->favorite)) {
             $favorite_icon = 'fa-star';
             $fav_status = 0;
@@ -114,8 +106,6 @@ if ($myCourses) {
                         <td><strong><a href='{$urlServer}courses/$course->code/'>".q($course->title)."</a></strong> (".q($course->public_code).")
                             <div><small>" . q($course->professor) . "</small></div>
                         </td>
-                        <td>" .q($day). "</td>
-                        <td>" .q($start_time). " - ".q($end_time). "</td>
                         <td class='text-center'>
                             $favorite_button &nbsp;
                             $action_button
