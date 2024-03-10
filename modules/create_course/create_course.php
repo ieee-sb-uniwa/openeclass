@@ -94,7 +94,7 @@ $head_content .= <<<hContent
     }
 
     $(document).ready(function() {
-        $('#startHour').timepicker({
+        $('#start_hour').timepicker({
             showMeridian: false,
             format: 'hh:ii',
             pickerPosition: 'bottom-right',
@@ -102,7 +102,7 @@ $head_content .= <<<hContent
             defaultTime: false,
             autoclose: true
         });
-        $('#endHour').timepicker({
+        $('#end_hour').timepicker({
             showMeridian: false,
             format: 'hh:ii',
             pickerPosition: 'bottom-right',
@@ -237,7 +237,7 @@ if (!isset($_POST['create_course'])) {
             <div class='form-group'>
                 <label for='course_day' class='col-sm-2 control-label'>$langDay:</label>
                 <div class='col-sm-10'>
-                <select class='form-control' name='dayOfWeek' id='dayOfWeek'>
+                <select class='form-control' name='course_day' id='course_day'>
                     <option value='1'>". q($langDay_of_weekNames['long'][1]) ."</option>
                     <option value='2'>". q($langDay_of_weekNames['long'][2]) ."</option>
                     <option value='3'>". q($langDay_of_weekNames['long'][3]) ."</option>
@@ -249,19 +249,19 @@ if (!isset($_POST['create_course'])) {
                 </div>
             </div>
             <div class='input-append bootstrap-timepicker form-group'>
-                <label for='startHour' class='col-sm-2 control-label'>$langStart <small>$langInHour</small>:</label>
+                <label for='start_hour' class='col-sm-2 control-label'>$langStart <small>$langInHour</small>:</label>
                 <div class='col-sm-10'>
                     <div class='input-group add-on'>
-                        <input class='form-control input-small' name='startHour' id='startHour' type='text' value='8:00'>
+                        <input class='form-control input-small' name='start_hour' id='start_hour' type='text' value='8:00'>
                         <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
             </div>
             <div class='input-append bootstrap-timepicker form-group'>
-                <label for='endHour' class='col-sm-2 control-label'>$langFinish <small>$langInHour</small>:</label>
+                <label for='end_hour' class='col-sm-2 control-label'>$langFinish <small>$langInHour</small>:</label>
                 <div class='col-sm-10'>
                     <div class='input-group add-on'>
-                        <input class='form-control input-small' name='endHour' id='endHour' type='text' value='8:00'>
+                        <input class='form-control input-small' name='end_hour' id='end_hour' type='text' value='8:00'>
                         <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
@@ -539,17 +539,17 @@ if (!isset($_POST['create_course'])) {
     $course->refresh($new_course_id, $departments);
 
     // Create course's timetable
-    if (isset($_POST['dayOfWeek'], $_POST['startHour'], $_POST['endHour'])) {
-        $dayOfWeek = intval($_POST['dayOfWeek']);
-        $startHour = $_POST['startHour'];
-        $endHour = $_POST['endHour'];
+    if (isset($_POST['course_day'], $_POST['start_hour'], $_POST['end_hour'])) {
+        $course_day = intval($_POST['course_day']);
+        $start_hour = $_POST['start_hour'];
+        $end_hour = $_POST['end_hour'];
       
         Database::get()->query("INSERT INTO courses_timetable 
                                 SET course_id = ?d,
                                     start_hour = ?t,
                                     end_hour = ?t,
                                     day_of_week = ?d",
-                                    $new_course_id, $startHour, $endHour, $dayOfWeek);
+                                    $new_course_id, $start_hour, $end_hour, $course_day);
     }
     // create courses/<CODE>/index.php
     course_index($code);
