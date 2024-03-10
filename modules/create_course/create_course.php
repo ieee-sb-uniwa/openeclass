@@ -44,6 +44,8 @@ $toolName = $langCourseCreate;
 load_js('jstree3');
 load_js('pwstrength.js');
 load_js('tools.js');
+load_js('bootstrap-timepicker');
+
 
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -92,7 +94,22 @@ $head_content .= <<<hContent
     }
 
     $(document).ready(function() {
-
+        $('#start_hour').timepicker({
+            showMeridian: false,
+            format: 'hh:ii',
+            pickerPosition: 'bottom-right',
+            minuteStep: 10,
+            defaultTime: false,
+            autoclose: true
+        });
+        $('#end_hour').timepicker({
+            showMeridian: false,
+            format: 'hh:ii',
+            pickerPosition: 'bottom-right',
+            minuteStep: 10,
+            defaultTime: false,
+            autoclose: true
+        });
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
         });
@@ -215,6 +232,38 @@ if (!isset($_POST['create_course'])) {
                 <label for='prof_names' class='col-sm-2 control-label'>$langTeachers:</label>
                 <div class='col-sm-10'>
                       <input class='form-control' type='text' name='prof_names' id='prof_names' value='" . q($prof_names) . "'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='course_day' class='col-sm-2 control-label'>$langDay:</label>
+                <div class='col-sm-10'>
+                <select class='form-control' name='course_day' id='course_day'>
+                    <option value='1'>". q($langDay_of_weekNames['long'][1]) ."</option>
+                    <option value='2'>". q($langDay_of_weekNames['long'][2]) ."</option>
+                    <option value='3'>". q($langDay_of_weekNames['long'][3]) ."</option>
+                    <option value='4'>". q($langDay_of_weekNames['long'][4]) ."</option>
+                    <option value='5'>". q($langDay_of_weekNames['long'][5]) ."</option>
+                    <option value='6'>". q($langDay_of_weekNames['long'][6]) ."</option>
+                    <option value='0'>". q($langDay_of_weekNames['long'][0]) ."</option>
+                </select>
+                </div>
+            </div>
+            <div class='input-append bootstrap-timepicker form-group'>
+                <label for='start_hour' class='col-sm-2 control-label'>$langStart <small>$langInHour</small>:</label>
+                <div class='col-sm-10'>
+                    <div class='input-group add-on'>
+                        <input class='form-control input-small' name='start_hour' id='start_hour' type='text' value='8:00'>
+                        <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class='input-append bootstrap-timepicker form-group'>
+                <label for='end_hour' class='col-sm-2 control-label'>$langFinish <small>$langInHour</small>:</label>
+                <div class='col-sm-10'>
+                    <div class='input-group add-on'>
+                        <input class='form-control input-small' name='end_hour' id='end_hour' type='text' value='8:00'>
+                        <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
+                    </div>
                 </div>
             </div>
             <div class='form-group'>
@@ -489,6 +538,19 @@ if (!isset($_POST['create_course'])) {
 
     $course->refresh($new_course_id, $departments);
 
+    // Create course's timetable
+    if (isset($_POST['course_day'], $_POST['start_hour'], $_POST['end_hour'])) {
+        $course_day = intval($_POST['course_day']);
+        $start_hour = $_POST['start_hour'];
+        $end_hour = $_POST['end_hour'];
+      
+        Database::get()->query("INSERT INTO courses_timetable 
+                                SET course_id = ?d,
+                                    start_hour = ?t,
+                                    end_hour = ?t,
+                                    day_of_week = ?d",
+                                    $new_course_id, $start_hour, $end_hour, $course_day);
+    }
     // create courses/<CODE>/index.php
     course_index($code);
 
