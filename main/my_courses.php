@@ -74,8 +74,6 @@ if ($myCourses) {
             <table class='table-default'>
                 <thead class='list-header'>
                     <th>$langCourse</th>
-                    <th>$langDay</th>
-                    <th>$langHours</th>
                     <th class='text-center'>".icon('fa-gears')."</th>
                 </thead>
                 <tbody>";
