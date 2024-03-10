@@ -539,22 +539,23 @@ if (!isset($_POST['create_course'])) {
     $course->refresh($new_course_id, $departments);
 
     // Create course's timetable
-    $dayOfWeek = intval($_POST['dayOfWeek']);
-    $startHour =$_POST['startHour'];
-    $endHour =   $_POST['endHour'];
-    // Add seconds to time format
-    $startHour .= ':00';
-    $endHour .= ':00';
-    // Ensure the time strings are in the correct format ("hh:ii:ss")
-    $startHour = DateTime::createFromFormat('H:i:s', $startHour)->format('H:i:s');
-    $endHour = DateTime::createFromFormat('H:i:s', $endHour)->format('H:i:s');
-    Database::get()->query("INSERT INTO courses_timetable 
-                            SET course_id = ?d,
-                                start_hour = ?t,
-                                end_hour = ?t,
-                                day_of_week = ?d",
-                                $new_course_id, $startHour, $endHour, $dayOfWeek);
-
+    if (isset($_POST['dayOfWeek'], $_POST['startHour'], $_POST['endHour'])) {
+        $dayOfWeek = intval($_POST['dayOfWeek']);
+        $startHour = $_POST['startHour'];
+        $endHour = $_POST['endHour'];
+        // Add seconds to time format
+        $startHour .= ':00';
+        $endHour .= ':00';
+        // Ensure the time strings are in the correct format ("hh:ii:ss")
+        $startHour = DateTime::createFromFormat('H:i:s', $startHour)->format('H:i:s');
+        $endHour = DateTime::createFromFormat('H:i:s', $endHour)->format('H:i:s');
+        Database::get()->query("INSERT INTO courses_timetable 
+                                SET course_id = ?d,
+                                    start_hour = ?t,
+                                    end_hour = ?t,
+                                    day_of_week = ?d",
+                                    $new_course_id, $startHour, $endHour, $dayOfWeek);
+    }
     // create courses/<CODE>/index.php
     course_index($code);
 
