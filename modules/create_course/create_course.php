@@ -98,7 +98,7 @@ $head_content .= <<<hContent
             showMeridian: false,
             format: 'hh:ii',
             pickerPosition: 'bottom-right',
-            minuteStep: 1,
+            minuteStep: 10,
             defaultTime: false,
             autoclose: true
         });
@@ -106,7 +106,7 @@ $head_content .= <<<hContent
             showMeridian: false,
             format: 'hh:ii',
             pickerPosition: 'bottom-right',
-            minuteStep: 1,
+            minuteStep: 10,
             defaultTime: false,
             autoclose: true
         });
@@ -238,13 +238,13 @@ if (!isset($_POST['create_course'])) {
                 <label for='course_day' class='col-sm-2 control-label'>$langDay:</label>
                 <div class='col-sm-10'>
                 <select class='form-control' name='dayOfWeek' id='dayOfWeek'>
-                    <option value='1'>".$langDay_of_weekNames['long'][1]."</option>
-                    <option value='2'>".$langDay_of_weekNames['long'][2]."</option>
-                    <option value='3'>".$langDay_of_weekNames['long'][3]."</option>
-                    <option value='4'>".$langDay_of_weekNames['long'][4]."</option>
-                    <option value='5'>".$langDay_of_weekNames['long'][5]."</option>
-                    <option value='6'>".$langDay_of_weekNames['long'][6]."</option>
-                    <option value='0'>".$langDay_of_weekNames['long'][0]."</option>
+                    <option value='1'>". q($langDay_of_weekNames['long'][1]) ."</option>
+                    <option value='2'>". q($langDay_of_weekNames['long'][2]) ."</option>
+                    <option value='3'>". q($langDay_of_weekNames['long'][3]) ."</option>
+                    <option value='4'>". q($langDay_of_weekNames['long'][4]) ."</option>
+                    <option value='5'>". q($langDay_of_weekNames['long'][5]) ."</option>
+                    <option value='6'>". q($langDay_of_weekNames['long'][6]) ."</option>
+                    <option value='0'>". q($langDay_of_weekNames['long'][0]) ."</option>
                 </select>
                 </div>
             </div>
