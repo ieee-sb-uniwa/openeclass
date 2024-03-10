@@ -252,7 +252,7 @@ if (!isset($_POST['create_course'])) {
                 <label for='startHour' class='col-sm-2 control-label'>$langStart <small>$langInHour</small>:</label>
                 <div class='col-sm-10'>
                     <div class='input-group add-on'>
-                        <input class='form-control input-small' name='startHour' id='startHour' type='text'>
+                        <input class='form-control input-small' name='startHour' id='startHour' type='text' value='8:00'>
                         <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
@@ -261,7 +261,7 @@ if (!isset($_POST['create_course'])) {
                 <label for='endHour' class='col-sm-2 control-label'>$langFinish <small>$langInHour</small>:</label>
                 <div class='col-sm-10'>
                     <div class='input-group add-on'>
-                        <input class='form-control input-small' name='endHour' id='endHour' type='text'>
+                        <input class='form-control input-small' name='endHour' id='endHour' type='text' value='8:00'>
                         <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
