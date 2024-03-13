@@ -1433,6 +1433,71 @@ if (!$displayWall && $displayQuickPoll) {
     }
 }
 
+//  Timetable
+$myCourses = Database::get()->queryArray("SELECT * FROM courses_timetable
+    WHERE courses_timetable.course_id = ?d", $course_id);
+
+// if ($is_editor and $course_info->view_type == 'units') {
+//     $link = "{$urlServer}modules/units/info.php?course=$course_code";
+//     $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
+//           <span class='fa fa-plus-circle'></span><span class='hidden'>.</span></a>";
+// }
+
+$link = "{$urlServer}modules/course_timetable/info.php?course=$course_code";
+
+function delTimetable($ttid) {
+    if ($ttid) {
+        $myCourses = Database::get()->query("DELETE FROM courses_timetable WHERE courses_timetable.id = ?d", $ttid);
+    }
+}
+
+$tool_content .= "
+        <div class='col-md-$cunits_sidebar_subcolumns'>
+            <div class='row'>
+                <div class='col-md-12'>
+                    <h3 class='content-title pull-left'>$langDateTime</h3>
+                    <a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
+                        <span class='fa fa-plus-circle'></span>
+                        <span class='hidden'>.</span>
+                    </a>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <div class='panel'>
+                        <div class='panel-body'>";
+
+foreach ($myCourses as $course) {
+    $ttid = $course->id;
+    $day = $langDay_of_weekNames['long'][$course->day_of_week];
+    $time_start = substr($course->start_hour, 0, -3);
+    $time_end = substr($course->end_hour, 0, -3);
+    $tool_content .= "<div class='row'>
+            <span class='col-sm-3'>$day</span>
+            <span class='col-sm-3'>$time_start - $time_end</span>
+            <span class='col-sm-3'>
+                <div class='item-side'>" .
+                    action_button(array(
+                        array('title' => $langEditChange,
+                            'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                            'icon' => 'fa-edit'),
+                        array('title' => $langDelete,
+                            'url' => "",
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => 'are you sure?'))) .
+                "</div>
+            </span>
+            
+            
+        </div>";
+}
+
+$tool_content .= "</div>
+            </div>
+        </div>
+        </div></div>";
+
 if (!$displayWall && $displayCalendar) {
     //BEGIN - Get user personal calendar
     $today = getdate();
