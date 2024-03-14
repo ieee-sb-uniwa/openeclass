@@ -32,13 +32,29 @@ if ($conn->connect_error) {
     echo "<h1>Connection was established</h1>";
     $sql = "SELECT * FROM courses_timetable";
     $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-          echo "<h2>" ."id: " . $row["course_id"]. " - Start time: " . $row["start_hour"]. " " . $row["end_hour"]." " .$row["day_of_week"]. "</h2>". "<br>";
+    if ($result) {
+        $data = array();
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
         }
-      } else {
+        $classMap = [];
+        foreach ($data as $dt) { //Loop through the classes
+            $startHour = $dt['start_hour']; // Take the selected classes start hour
+            if (!isset($classMap[$startHour])) {//if the starting hour has been found again ignore, else add it.
+                $classMap[$startHour] = [];
+            }
+            $classMap[$startHour][] = $dt;//Add the class under that key
+        }
+        foreach ($classMap as $hour => $classesAtHour) {
+            echo "<h1>Classes starting at hour $hour:\n</h1>";
+            foreach ($classesAtHour as $class) {
+                echo "<h1>- {$class['class_name']}\n</h1>";
+            }
+            echo "\n";
+        }
+    } else {
         echo "0 results";
-      }
+    }
     
 }
 
