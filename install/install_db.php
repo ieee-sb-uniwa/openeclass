@@ -227,7 +227,7 @@ $db->query("CREATE TABLE `courses_timetable` (
     `repeat_interval` INT(11) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`created_by`) REFERENCES `user`(`id`) ON DELETE CASCADE
   ) $tbl_options");
 
 $db->query("CREATE TABLE `course_user_request` (
