@@ -214,13 +214,20 @@ $db->query("CREATE TABLE `course_user` (
       `favorite` datetime DEFAULT NULL,
       PRIMARY KEY (course_id, user_id)) $tbl_options");
 
-$db->query("CREATE TABLE IF NOT EXISTS `courses_timetable` (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    course_id INT,
-    start_hour TIME CHECK (start_hour BETWEEN '00:00:00' AND '23:59:59'),
-    end_hour TIME CHECK (end_hour BETWEEN '00:00:00' AND '23:59:59'),
-    day_of_week TINYINT UNSIGNED CHECK (day_of_week BETWEEN 0 AND 6), 
-    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
+$db->query("CREATE TABLE IF NOT EXISTS `courses_timetable` ( 
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    course_id INT(11) NOT NULL,
+    created_by INT(11) NOT NULL,
+    start_hour TIME CHECK (start_hour BETWEEN '00:00:00' AND '23:59:59') NOT NULL,
+    end_hour TIME CHECK (end_hour BETWEEN '00:00:00' AND '23:59:59') NOT NULL,
+    day_of_week TINYINT UNSIGNED CHECK (day_of_week BETWEEN 0 AND 6) NOT NULL, 
+    visible BOOLEAN NOT NULL DEFAULT TRUE,
+	room VARCHAR(255) DEFAULT NULL,
+    schedule_type VARCHAR(255) DEFAULT NULL, 
+    repeat_interval INT(11) NOT NULL DEFAULT 1,
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
+);
 ) $tbl_options");
 
 $db->query("CREATE TABLE `course_user_request` (
