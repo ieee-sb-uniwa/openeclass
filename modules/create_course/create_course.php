@@ -546,10 +546,11 @@ if (!isset($_POST['create_course'])) {
       
         Database::get()->query("INSERT INTO courses_timetable 
                                 SET course_id = ?d,
+                                    created_by = ?d,
                                     start_hour = ?t,
                                     end_hour = ?t,
                                     day_of_week = ?d",
-                                    $new_course_id, $start_hour, $end_hour, $course_day);
+                                    $new_course_id, $uid, $start_hour, $end_hour, $course_day);
     }
     // create courses/<CODE>/index.php
     course_index($code);
