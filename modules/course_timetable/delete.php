@@ -27,6 +27,7 @@
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 
+
 if(isset($_GET['ttid'])) {
     $ttid = $_GET['ttid'];
     Database::get()->query("DELETE FROM courses_timetable WHERE courses_timetable.id = ?d", $ttid);
