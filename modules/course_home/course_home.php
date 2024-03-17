@@ -1434,8 +1434,11 @@ if (!$displayWall && $displayQuickPoll) {
 }
 
 //  Timetable
-$myCourses = Database::get()->queryArray("SELECT * FROM courses_timetable
-    WHERE courses_timetable.course_id = ?d", $course_id);
+$myCourses = Database::get()->queryArray("SELECT courses_timetable.*, user.surname AS creator
+                FROM courses_timetable
+                JOIN user ON courses_timetable.created_by = user.id
+                WHERE courses_timetable.course_id = ?d
+                ORDER BY courses_timetable.start_hour, courses_timetable.day_of_week", $course_id);
 
 // if ($is_editor and $course_info->view_type == 'units') {
 //     $link = "{$urlServer}modules/units/info.php?course=$course_code";
@@ -1444,12 +1447,6 @@ $myCourses = Database::get()->queryArray("SELECT * FROM courses_timetable
 // }
 
 $link = "{$urlServer}modules/course_timetable/info.php?course=$course_code";
-
-function delTimetable($ttid) {
-    if ($ttid) {
-        $myCourses = Database::get()->query("DELETE FROM courses_timetable WHERE courses_timetable.id = ?d", $ttid);
-    }
-}
 
 $tool_content .= "
         <div class='col-md-$cunits_sidebar_subcolumns'>
@@ -1469,20 +1466,36 @@ $tool_content .= "
 
 foreach ($myCourses as $course) {
     $ttid = $course->id;
-    $day = $langDay_of_weekNames['long'][$course->day_of_week];
+    $creator = $course->creator;
+    $day = $langDay_of_weekNames['short'][$course->day_of_week];
     $time_start = substr($course->start_hour, 0, -3);
     $time_end = substr($course->end_hour, 0, -3);
+    $room = $course->room;
+
+    // if ($room) {
+    //     $tool_content .= "<div class='row'>$room<div>";
+    // }
+
+    // <div class='item-side'>" .
+    //                 action_button(array(
+    //                     array('title' => $langEditChange,
+    //                         'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+    //                         'icon' => 'fa-edit'),
+    //                     array('title' => $langDelete,
+    //                         'url' => "{$urlServer}modules/course_timetable/delete.php?ttid=$ttid",
+    //                         'icon' => 'fa-times',
+    //                         'class' => 'delete',
+    //                         'confirm' => 'are you sure?'))) .
+    //             "</div>
+
     $tool_content .= "<div class='row'>
             <span class='col-sm-3'>$day</span>
-            <span class='col-sm-3'>$time_start - $time_end</span>
+            <span class='col-sm-5'>$time_start - $time_end</span>
             <span class='col-sm-3'>
                 <div class='item-side'>" .
                     action_button(array(
-                        array('title' => $langEditChange,
-                            'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
-                            'icon' => 'fa-edit'),
                         array('title' => $langDelete,
-                            'url' => "",
+                            'url' => "{$urlServer}modules/course_timetable/delete.php?ttid=$ttid",
                             'icon' => 'fa-times',
                             'class' => 'delete',
                             'confirm' => 'are you sure?'))) .
@@ -1496,7 +1509,8 @@ foreach ($myCourses as $course) {
 $tool_content .= "</div>
             </div>
         </div>
-        </div></div>";
+    </div>
+</div>";
 
 if (!$displayWall && $displayCalendar) {
     //BEGIN - Get user personal calendar
