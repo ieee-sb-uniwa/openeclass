@@ -44,11 +44,14 @@ if ($conn->connect_error) {
                 $classMap[$startHour] = [];
             }
             $classMap[$startHour][] = $dt;//Add the class under that key
-        }
+        }   
+        //classmap has access to the day that each class is so that makes for easier distribution on the timetable. Use the 
+        //following on the loop to access the day: $class['day_of_week']
         foreach ($classMap as $hour => $classesAtHour) {
             echo "<h1>Classes starting at hour $hour:\n</h1>";
             foreach ($classesAtHour as $class) {
                 echo "<h1>- {$class['class_name']}\n</h1>";
+                echo "<h1>- {$class['day_of_week']}\n</h1>";
             }
             echo "\n";
         }
