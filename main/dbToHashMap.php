@@ -37,21 +37,39 @@ if ($conn->connect_error) {
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
         }
+        $formated=array();
+        foreach($data as $dt){
+            $count = intval((int)$dt['end_hour'] - (int)$dt['start_hour']);
+            if($count>1){
+                for($i=0;$i<$count;$i++){
+                    $formatted_row = $dt;
+                    unset($formatted_row['end_hour']);
+                    if($i != 0){
+                        $time_object = DateTime::createFromFormat('H:i:s', $formatted_row['start_hour']);
+                        $time_object->add(new DateInterval('PT' . ($i) . 'H'));
+                        $formatted_row['start_hour'] = $time_object->format('H:i:s');
+                           
+                    }
+                    unset($formatted_row['end_hour']);
+                    array_push($formated, $formatted_row);
+                }
+            }
+        }
         $classMap = [];
-        foreach ($data as $dt) { //Loop through the classes
-            $startHour = $dt['start_hour']; // Take the selected classes start hour
+        foreach ($formated as $ft) { //Loop through the classes
+            $startHour = $ft['start_hour']; // Take the selected classes start hour
             if (!isset($classMap[$startHour])) {//if the starting hour has been found again ignore, else add it.
                 $classMap[$startHour] = [];
             }
-            $classMap[$startHour][] = $dt;//Add the class under that key
+            $classMap[$startHour][] = $ft;//Add the class under that key
         }   
         //classmap has access to the day that each class is so that makes for easier distribution on the timetable. Use the 
         //following on the loop to access the day: $class['day_of_week']
         foreach ($classMap as $hour => $classesAtHour) {
             echo "<h1>Classes starting at hour $hour:\n</h1>";
             foreach ($classesAtHour as $class) {
-                echo "<h1>- {$class['class_name']}\n</h1>";
-                echo "<h1>- {$class['day_of_week']}\n</h1>";
+                echo "<h1>- {$class['class_name']} - {$class['day_of_week']}\n</h1>";
+                //echo "<h1>- {$class['day_of_week']}\n</h1>";
             }
             echo "\n";
         }
