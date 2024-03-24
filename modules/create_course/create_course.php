@@ -267,6 +267,12 @@ if (!isset($_POST['create_course'])) {
                 </div>
             </div>
             <div class='form-group'>
+                <label for='classroom' class='col-sm-2 control-label'>$langClassroomname:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control' type='text' name='classroom' id='classroom'>
+                </div>
+            </div>
+            <div class='form-group'>
                 <label for='localize' class='col-sm-2 control-label'>$langLanguage:</label>
                 <div class='col-sm-10'>
                       " . lang_select_options('localize', "class='form-control'") . "
@@ -539,6 +545,12 @@ if (!isset($_POST['create_course'])) {
     $course->refresh($new_course_id, $departments);
 
     // Create course's timetable
+    
+    if (empty($_POST['classroom'])) {
+        $classroom = '';
+    } else {
+        $classroom = mb_substr($_POST['classroom'], 0 ,20);
+    }
     if (isset($_POST['course_day'], $_POST['start_hour'], $_POST['end_hour'])) {
         $course_day = intval($_POST['course_day']);
         $start_hour = $_POST['start_hour'];
@@ -549,8 +561,9 @@ if (!isset($_POST['create_course'])) {
                                     created_by = ?d,
                                     start_hour = ?t,
                                     end_hour = ?t,
-                                    day_of_week = ?d",
-                                    $new_course_id, $uid, $start_hour, $end_hour, $course_day);
+                                    day_of_week = ?d,
+                                    room = ?s",
+                                    $new_course_id, $uid, $start_hour, $end_hour, $course_day, $classroom);
     }
     // create courses/<CODE>/index.php
     course_index($code);
