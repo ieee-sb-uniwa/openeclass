@@ -81,9 +81,9 @@ class Calendar_Events {
             Calendar_Events::$calsettings->show_admin = $q->show_admin;
         } else {
             Calendar_Events::$calsettings->view_type = 'month';
-            Calendar_Events::$calsettings->personal_color = '#5882fa';
+            Calendar_Events::$calsettings->personal_color = '#c53cb0';
             Calendar_Events::$calsettings->course_color = '#5882fa';
-            Calendar_Events::$calsettings->deadline_color = '#fa5882';
+            Calendar_Events::$calsettings->deadline_color = '#ad2121';
             Calendar_Events::$calsettings->admin_color = '#eeeeee';
             Calendar_Events::$calsettings->show_personal = 1;
             Calendar_Events::$calsettings->show_course = 1;
