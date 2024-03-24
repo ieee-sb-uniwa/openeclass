@@ -272,7 +272,9 @@ class Calendar_Events {
                 }
 
                 $dc = str_replace('start', 'ass.deadline', $datecond);
-                $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline, '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+                $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline, '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, "  
+                        . "CASE WHEN submit.submission_date IS NULL THEN 'event-important' ELSE 'event-success' END class, " 
+                        . "'assignment' event_type, c.code course " 
                         . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id "
                         . "JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
                         . "LEFT JOIN assignment_submit submit ON ass.id = submit.assignment_id "  
