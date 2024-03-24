@@ -308,7 +308,8 @@ $langAll = "όλοι";
 $langNoSuchUsers = "Δεν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
 $langAsInactive = "ως μη ενεργοί";
 $langChanges = "αλλαγές";
-
+// timetable
+$langClassroomname = "Όνομα αίθουσας";
 // courses list
 $langOpenCourse = "Ανοικτό $langsCourse";
 $langClosedCourse = "Κλειστό $langsCourse";
