@@ -35,7 +35,7 @@
 
 require_once 'include/log.class.php';
 require_once 'include/lib/references.class.php';
-require_once 'modules/work/functions.php';
+
 class Calendar_Events {
 
     /** @staticvar array of event groups to group and style events in calendar
@@ -751,7 +751,9 @@ class Calendar_Events {
             $q .= " UNION ";
         }
         $dc = str_replace('start', 'ex.end_date', $datecond);
-        $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date, '%Y-%m-%d') startdate, '00:00' duration, date_format(addtime(ex.end_date, time('00:00:01')), '%Y-%m-%d %H:%i') `end`, concat(ex.description, '\n', '(deadline: ', ex.end_date, ')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+        $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date, '%Y-%m-%d') startdate, '00:00' duration, date_format(addtime(ex.end_date, time('00:00:01')), '%Y-%m-%d %H:%i') `end`, concat(ex.description, '\n', '(deadline: ', ex.end_date, ')') content, 'deadline' event_group, "
+                . "CASE WHEN eur.attempt_status=2 THEN 'event-submitted' ELSE 'event-important' END class, "
+                . "'exercise' event_type, c.code course "
                 . "FROM exercise ex JOIN course c ON ex.course_id=c.id LEFT JOIN  exercise_to_specific ex_sp ON ex.id = ex_sp.exercise_id "
                 . "WHERE ex.course_id = ?d AND ex.active = 1 "
                 . $dc
