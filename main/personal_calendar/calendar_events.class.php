@@ -727,8 +727,11 @@ class Calendar_Events {
             $q .= " UNION ";
         }
         $dc = str_replace('start', 'ass.deadline', $datecond);
-        $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline, '%Y-%m-%d') startdate, '00:00' duration, date_format(addtime(ass.deadline, time('00:00:01')), '%Y-%m-%d %H:%i') `end`, concat(ass.description, '\n', '(deadline: ', deadline, ')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+        $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline, '%Y-%m-%d') startdate, '00:00' duration, date_format(addtime(ass.deadline, time('00:00:01')), '%Y-%m-%d %H:%i') `end`, concat(ass.description, '\n', '(deadline: ', deadline, ')') content, 'deadline' event_group, "  
+                . "CASE WHEN submit.uid = $uid THEN 'event-submitted' ELSE 'event-important' END AS class, "  
+                . "'assignment' event_type, c.code course " 
                 . "FROM assignment ass JOIN course c ON ass.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
+                . "LEFT JOIN assignment_submit submit ON ass.id = submit.assignment_id AND submit.uid = $uid "
                 . "WHERE ass.course_id =?d AND ass.active = 1 "
                 . $dc .
                 "AND (assign_to_specific = 0 OR
