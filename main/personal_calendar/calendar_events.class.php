@@ -294,9 +294,12 @@ class Calendar_Events {
                     $q .= " UNION ";
                 }
                 $dc = str_replace('start', 'ex.end_date', $datecond);
-                $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(addtime(ex.end_date, time('00:00')), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',ex.end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+                $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(addtime(ex.end_date, time('00:00')), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',ex.end_date,')') content, 'deadline' event_group, "
+                        . "CASE WHEN eur.attempt_status=2 THEN 'event-submitted' ELSE 'event-important' END class, "
+                        . "'exercise' event_type, c.code course "
                         . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id "
                         . "JOIN course c ON cu.course_id=c.id LEFT JOIN exercise_to_specific ex_sp ON ex.id = ex_sp.exercise_id "
+                        . "LEFT JOIN exercise_user_record eur ON ex.id = eur.eid AND eur.uid = $user_id "
                         . "WHERE cu.user_id = ?d " . $dc
                         . "AND ex.public = 1 AND ex.active = 1 AND (assign_to_specific = 0 OR ex_sp.user_id = ?d $group_sql_template) AND c.visible != " . COURSE_INACTIVE . " ";
                 $q_args = array_merge($q_args, $q_args_templ, array($user_id), $student_groups);
