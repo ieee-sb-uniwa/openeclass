@@ -338,7 +338,7 @@
   background-color: #ad2121;
 }
 .event-submitted {
-  background-color: #ede5d3;
+  background-color: #0e6668;
 }
 .event-info {
   background-color: #1e90ff;
@@ -365,7 +365,7 @@
 }
 .day-highlight.dh-event-submitted:hover,
 .day-highlight.dh-event-submitted {
-  background-color: #ede5d383;
+  background-color: #0e676841;
 }
 .day-highlight.dh-event-warning:hover,
 .day-highlight.dh-event-warning {
